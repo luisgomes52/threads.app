@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -37,12 +36,12 @@ interface Props {
 }
 
 const AccountProfile = ({user, btnTitle}: Props) => {
-  const [files, setFiles] = useState<File[]>([])
   const {startUpload} = useUploadThing("media")
   const router = useRouter();
   const pathname = usePathname();
-
-  const form = useForm({
+  const [files, setFiles] = useState<File[]>([])
+  
+  const form = useForm<z.infer<typeof UserValidation>>({
         resolver: zodResolver(UserValidation),
         defaultValues: {
             profile_photo: user?.image || "",
@@ -87,7 +86,6 @@ const AccountProfile = ({user, btnTitle}: Props) => {
       }
 
     }
-    console.log(values)
 
     await updateUser({
       userId: user.id,
